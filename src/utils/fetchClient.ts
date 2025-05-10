@@ -45,6 +45,10 @@ export const client = {
   delete: (url: string) => request(url, 'DELETE'),
 };
 
+export const createUser = (email: string, name: string) => {
+  return client.post<User>(`/users`, {email, name})
+}
+
 export const getUsers = () => {
   return client.get<User[]>(`/users`);
 };
@@ -52,6 +56,10 @@ export const getUsers = () => {
 export const getPosts = (userId: number) => {
   return client.get<Post[]>(`/posts?userId=${userId}`);
 };
+
+export const createPost = (title: string, body: string) => {
+  return client.post<Post>("/posts", {title, body});
+}
 
 export const getComments = (id: number) => {
   return client.get<Comment[]>(`/comments?postId=${id}`);

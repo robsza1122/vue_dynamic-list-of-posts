@@ -1,27 +1,27 @@
 
 <script lang="ts">
-import {getUsers} from "../utils/fetchClient"
+// import {getUsers} from "../utils/fetchClient"
 
 
 
-export default {
+// export default {
 
-  data () {
-    return {
-      users: [],
-    }
-  },
-  mounted() {
-    getUsers().then(data => this.users = data)
-  }
-}
+//   data () {
+//     return {
+//       users: [],
+//     }
+//   },
+//   mounted() {
+//     getUsers().then(data => this.users = data)
+//   }
+// }
 </script>
 <template>
 <div
       data-cy="UserSelector"
       className="dropdown"
     >
-      <div className="dropdown-trigger">
+      <!-- <div className="dropdown-trigger">
         <button
           type="button"
           className="button"
@@ -38,7 +38,7 @@ export default {
         <div className="dropdown-content">
           {{ users }}
         </div>
-      </div>
+      </div> -->
     </div>
 
 </template>

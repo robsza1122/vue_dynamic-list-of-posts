@@ -1,75 +1,17 @@
-<script lang="ts">
-import  PostsList  from './components/PostsList.vue';
-import  PostDetails  from './components/PostDetails.vue';
-import  UserSelector  from './components/UserSelector.vue';
-import  Loader  from "./components/Loader/Loader.vue";
-import LoginUser from './components/LoginUser.vue';
-import { ref } from 'vue';
-import { getUser } from './utils/UserLocaleStorage';
+<script setup>
+import AuthenticatedContent from './components/AuthenticatedContent.vue'
+import LoginUser from './components/AuthUser.vue'
+import { ref } from 'vue'
+import { getUser } from './utils/UserLocaleStorage'
 
+const user = ref(getUser());
 
-export default {
-  components: {
-    PostsList,
-    PostDetails,
-    UserSelector,
-    Loader,
-    LoginUser,
-  },
-
-}
-
-const user = ref(getUser())
-
+console.log(user.value)
 </script>
 
 <template>
-  <LoginUser v-if="!user" v-model:user="user"/>
-    <main className="section">
-      <div className="container">
-        <div className="tile is-ancestor">
-          <div className="tile is-parent">
-            <div className="tile is-child box is-success">
-              <div className="block">
-                <UserSelector />
-              </div>
-              <div className="block" data-cy="MainContent">
-
-                  <p data-cy="NoSelectedUser">No user selected</p>
-
-                <Loader />
-
-                  <div
-                    className="notification is-danger"
-                    data-cy="PostsLoadingError"
-                  >
-                    {errorNotification}
-                  </div>
-
-
-                  <div className="notification is-warning" data-cy="NoPostsYet">
-                    No posts yet
-                  </div>
-
-
-                  <PostsList />
-
-              </div>
-            </div>
-          </div>
-          <div
-            data-cy="Sidebar"
-            className="tile is-parent is-8-destop Sidebar Sidebar--open"
-          >
-
-              <div className="tile is-child box is-success ">
-                <PostDetails />
-              </div>
-
-          </div>
-        </div>
-      </div>
-    </main>
+  <LoginUser v-if="!user" v-model:user="user" />
+  <AuthenticatedContent v-else v-model:user="user" />
 </template>
 <style>
 .Sidebar {
@@ -90,4 +32,5 @@ const user = ref(getUser())
   @media (min-width: 769px) {
     max-width: 50%;
   }
-}</style>
+}
+</style>

@@ -1,54 +1,80 @@
-<script lang="ts">
-export default {
-  data() {
-    return {
-      posts: [],
-    }
+<script setup>
+import { SideBarEnum } from '@/utils/SideBarModes'
+import PostItem from './PostItem.vue'
+const { posts } = defineProps({
+  posts: {
+    type: Array,
   },
-  mounted() {
-    
-  }
+})
+
+const currentPostId = defineModel('currentPostId', {
+  type: Number,
+})
+const sideBarMode = defineModel('sideBarMode', {
+  type: String,
+})
+const title = defineModel('title', {
+  type: String,
+  default: '',
+})
+const body = defineModel('body', {
+  type: String,
+  default: '',
+})
+
+const openNewPostForm = () => {
+  currentPostId.value = null;
+  sideBarMode.value = SideBarEnum.New_Post_Form;
+
+  title.value = '';
+  body.value = '';
+
+  console.log(sideBarMode.value)
 }
 
+console.log(title.value);
+console.log(sideBarMode.value);
 
 </script>
 
-
-
 <template>
+  <div className="tile is-parent">
+    <div className="tile is-child box is-success">
+      <div className="block">
+        <div className="block is-flex is-justify-content-space-between">
+          <p className="title">Posts</p>
+          <button
+            type="button"
+            class="button is-link"
+            :class="{ 'is-light': sideBarMode === SideBarEnum.New_Post_Form }"
+            @click="openNewPostForm"
+          >
+            Add New Post
+          </button>
+        </div>
+        <p class="notification is-warning" data-cy="NoPostsYet" v-if="posts.length === 0">
+          No posts yet
+        </p>
 
-
-    <div data-cy="PostsList">
-      <p className="title">Posts:</p>
-      <table className="table is-fullwidth is-striped is-hoverable is-narrow">
-        <thead>
-          <tr className="has-background-link-light">
-            <th>#</th>
-            <th>Title</th>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <th> </th>
-          </tr>
-        </thead>
-        <tbody>
-          {{posts}}
-            {/* return (
-              <tr data-cy="Post" key={post.id}>
-                <td data-cy="PostId">{post.id}</td>
-                <td data-cy="PostTitle">{post.body}</td>
-                <td className="has-text-right is-vcentered">
-                  <button
-                    type="button"
-                    data-cy="PostButton"
-                    className="button is-link is-light"
-                  >
-                    {selectedPost?.id === post.id ? 'Close' : 'Open'}
-                  </button>
-                </td>
-              </tr>
-            ); */}
-
-        </tbody>
-      </table>
+        <table class="table is-fullwidth is-striped is-hoverable is-narrow" v-else>
+          <thead>
+            <tr className="has-background-link-light">
+              <th>ID</th>
+              <th>Title</th>
+              <th className="has-text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <PostItem
+              v-for="post of posts"
+              :key="post.id"
+              v-model:currentPostId="currentPostId"
+              v-model:sideBarMode="sideBarMode"
+              :post="post"
+            />
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 </template>
-
