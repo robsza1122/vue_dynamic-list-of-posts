@@ -1,9 +1,10 @@
 <script setup>
 import { getPost, deletePost } from '@/api/api.posts'
-import { getComments } from '@/api/api.comments'
+import Comment from './Comment.vue'
 import { onMounted, ref, watch } from 'vue'
 import Loader from './Loader/Loader.vue'
 import { SideBarEnum } from '@/utils/SideBarModes'
+import NewCommentForm from './NewCommentForm.vue'
 
 
 const { postId } = defineProps({
@@ -29,17 +30,8 @@ const title = defineModel('title', {
 })
 const post = ref({})
 const comments = ref([]);
+const newCommentFormIsShown = ref(false);
 const isLoading = ref(false)
-
-const showComments = async () => {
-  sideBarMode.value = SideBarEnum.Comments_List;
-  try {
-    comments.value = await getComments(currentPostId.value);
-
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 const onShowPost = async () => {
   isLoading.value = true
@@ -55,7 +47,7 @@ const onShowPost = async () => {
 }
 
 onMounted(onShowPost)
-watch(() => postId, onShowPost, showComments)
+watch(() => postId, onShowPost)
 
 const onDeletePost = async () => {
   try {
@@ -75,7 +67,7 @@ const onEditPost = () => {
 }
 
 const openCommentForm = () => {
-  sideBarMode.value = SideBarEnum.New_Comment_Form;
+  newCommentFormIsShown.value = true;
   currentPostId.value = postId;
   body.value = post.value.body;
   title.value = post.value.title;
@@ -107,16 +99,20 @@ console.log(postId)
     <div className="block" v-if="comments.length === 0">
   <p className="title is-4">No comments yet</p>
 </div>
+<div  v-for="comment in comments" :key="comment.id">
+  <Comment
+  v-if="!newCommentFormIsShown"
+  :comment="comment"/>
+</div>
+<NewCommentForm
+          v-if="newCommentFormIsShown"
+          v-model:sideBarMode="sideBarMode"
+          v-model:newCommentFormIsShown="newCommentFormIsShown"
+          v-model:comments="comments"
+          :postId="postId"
+          />
 
-    <article className="message is-small" v-if="comments.length > 0">
-  <div className="message-header">
-    <a href="{`mailto:${email}`}"> name </a>
-    <button type="button" className="delete is-small" aria-label="delete">
 
-    </button>
-  </div>
-  <div className="message-body">el body</div>
-</article>
-<button type="button" className="button is-link" @click="openCommentForm">Write a comment</button>
+<button v-if="!newCommentFormIsShown" type="button" className="button is-link" @click="openCommentForm">Write a comment</button>
   </div>
 </template>

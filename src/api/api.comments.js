@@ -8,11 +8,11 @@ export const removeComments = (id) => {
   return client.delete(`/comments/${id}`);
 };
 
-export const addComments = ({
+export const addComments = (
   postId,
   name,
   email,
   body,
-}) => {
-  return client.post>('/comments', { postId, name, email, body });
+) => {
+  return client.post('/comments', { postId, name, email, body });
 };

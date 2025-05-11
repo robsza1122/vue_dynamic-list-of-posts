@@ -1,130 +1,104 @@
 <script setup>
-import { ErrorMessages } from '@/utils/ErrorMessages';
-import { ref } from 'vue';
+import { ErrorMessages } from '@/utils/ErrorMessages'
+import { ref } from 'vue'
+import InputField from './InputField.vue'
+import TextAreaField from './TextAreaField.vue'
+import { addComments } from '@/api/api.comments'
 
-
-const sideBarMode = defineModel('sideBarMode', {
-  type: String,
+const { postId } = defineProps({
+  postId: {
+    type: Number,
+    required: true,
+  },
+})
+const comments = defineModel('comments', {
+  type: Array,
 })
 const commentsErrors = {
   nameError: ErrorMessages.None,
   emailError: ErrorMessages.None,
   bodyError: ErrorMessages.None,
 }
+const newCommentFormIsShown = defineModel('newCommentFormIsShown', {
+  type: Boolean,
+})
 const errors = ref({
   ...commentsErrors,
 })
+const name = ref('')
+const email = ref('')
+const body = ref('')
 
 const onClear = () => {
-  sideBarMode.value = '';
+  newCommentFormIsShown.value = false
 }
 
+const onAddComment = async () => {
+  errors.value = { ...commentsErrors }
+  if (!name.value.trim()) {
+    errors.value.nameError = ErrorMessages.Name_Is_Required
+  }
+  if (!email.value.trim()) {
+    errors.value.emailError = ErrorMessages.Email_Is_Required
+  }
+  if (!body.value.trim()) {
+    errors.value.bodyError = ErrorMessages.Comment_Is_Empty
+  }
+
+  if (errors.value.nameError || errors.value.emailError || errors.value.bodyError) {
+    return
+  }
+
+  try {
+    const newComment = addComments(
+      postId,
+      name.value.trim(),
+      email.value.trim(),
+      body.value.trim(),
+    )
+    comments.value.push(newComment);
+    newCommentFormIsShown.value = false
+  } catch (error) {
+    console.error(error)
+  }
+}
 </script>
 
-
-
 <template>
-    <form
-      data-cy="NewCommentForm"
-      @reset="onClear"
-    >
-      <div className="field" data-cy="NameField">
-        <label className="label" htmlFor="comment-author-name">
-          Author Name
-        </label>
-        <div className="control has-icons-left has-icons-right">
-          <input
-            type="text"
-            name="name"
-            id="comment-author-name"
-            placeholder="Name Surname"
-            class="input"
-            :class="{'is-danger': errors.nameError !== ErrorMessages.None}"
-          />
-          <span className="icon is-small is-left">
-            <i className="fas fa-user" />
-          </span>
-
-            <span
-              class="icon is-small is-right has-text-danger"
-              data-cy="ErrorIcon"
-            >
-              <i className="fas fa-exclamation-triangle" v-if="errors.nameError !== ErrorMessages.None"/>
-            </span>
-
-        </div>
-
-          <p className="help" data-cy="ErrorMessage" :class="{'is-danger': errors.nameError !== ErrorMessages.None}">
-            {{ errors.nameError }}
-          </p>
-
+  <form data-cy="NewCommentForm" @reset="onClear" @submit.prevent="onAddComment">
+    <InputField
+      v-model="name"
+      v-model:error="errors.nameError"
+      title="Author Name"
+      placeholder="Author Name"
+      icon="fa-user"
+      :disabled="userNoRegistered"
+      type="text"
+    />
+    <InputField
+      v-model="email"
+      v-model:error="errors.emailError"
+      title="Author Email"
+      icon="fa-envelope"
+      placeholder="Author Email"
+      type="email"
+      :disabled="userNoRegistered"
+    />
+    <TextAreaField
+      v-model="body"
+      v-model:error="errors.bodyError"
+      title="Comment"
+      placeholder="Type comment"
+    />
+    <div className="field is-grouped">
+      <div className="control">
+        <button type="submit" class="button is-link" :class="{ 'is-loading': isLoading }">
+          Add
+        </button>
       </div>
-      <div className="field" data-cy="EmailField">
-        <label className="label" htmlFor="comment-author-email">
-          Author Email
-        </label>
-        <div className="control has-icons-left has-icons-right">
-          <input
-            type="text"
-            name="email"
-
-            id="comment-author-email"
-            placeholder="email@test.com"
-            class="input"
-            :class="{'is-danger': errors.emailError !== ErrorMessages.None}"
-          />
-          <span className="icon is-small is-left">
-            <i className="fas fa-envelope" />
-          </span>
-
-            <span
-              className="icon is-small is-right has-text-danger"
-              data-cy="ErrorIcon"
-            >
-              <i className="fas fa-exclamation-triangle" v-if="errors.emailError !== ErrorMessages.None"/>
-            </span>
-
-        </div>
-
-          <p className="help is-danger" data-cy="ErrorMessage">
-            {{ errors.emailError }}
-          </p>
-
+      <div className="control">
+        <button type="reset" className="button is-link is-light">Clear</button>
       </div>
-      <div className="field" data-cy="BodyField">
-        <label className="label" htmlFor="comment-body">
-          Comment Text
-        </label>
-        <div className="control">
-          <textarea
-            id="comment-body"
-            name="body"
-            placeholder="Type comment here"
-            class="input"
-            :class="{'is-danger': errors.bodyError !== ErrorMessages.None}"
-          />
-        </div>
-
-          <p className="help is-danger" data-cy="ErrorMessage">
-            {{ errors.bodyError }}
-          </p>
-
-      </div>
-      <div className="field is-grouped">
-        <div className="control">
-          <button
-            type="submit"
-            className="button is-link is-loading"
-          >
-            Add
-          </button>
-        </div>
-        <div className="control">
-          <button type="reset" className="button is-link is-light">
-            Clear
-          </button>
-        </div>
-      </div>
-    </form>
-    </template>
-
+    </div>
+  </form>
+</template>

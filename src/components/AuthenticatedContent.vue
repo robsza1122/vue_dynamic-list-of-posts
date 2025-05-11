@@ -8,7 +8,6 @@ import { onMounted, ref } from 'vue'
 import { getPosts } from '../api/api.posts'
 import NewPostForm from './NewPostForm.vue'
 import EditForm from './EditForm.vue'
-import NewCommentForm from './NewCommentForm.vue'
 
 const user = defineModel('user', {
   type: Object,
@@ -88,9 +87,6 @@ console.log(currentPostId.value)
             v-model:title="title"
             v-model:body="body"
           />
-          <NewCommentForm
-          v-else-if="sideBarMode === SideBarEnum.New_Comment_Form"
-          v-model:sideBarMode="sideBarMode"/>
         </SideBar>
       </div>
     </div>
