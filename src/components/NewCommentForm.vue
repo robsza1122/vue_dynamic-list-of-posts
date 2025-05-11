@@ -1,9 +1,24 @@
-<script>
+<script setup>
+import { ErrorMessages } from '@/utils/ErrorMessages';
+import { ref } from 'vue';
 
 
-export default {
-  
+const sideBarMode = defineModel('sideBarMode', {
+  type: String,
+})
+const commentsErrors = {
+  nameError: ErrorMessages.None,
+  emailError: ErrorMessages.None,
+  bodyError: ErrorMessages.None,
 }
+const errors = ref({
+  ...commentsErrors,
+})
+
+const onClear = () => {
+  sideBarMode.value = '';
+}
+
 </script>
 
 
@@ -11,6 +26,7 @@ export default {
 <template>
     <form
       data-cy="NewCommentForm"
+      @reset="onClear"
     >
       <div className="field" data-cy="NameField">
         <label className="label" htmlFor="comment-author-name">
@@ -22,25 +38,26 @@ export default {
             name="name"
             id="comment-author-name"
             placeholder="Name Surname"
-            className="input is-danger"
+            class="input"
+            :class="{'is-danger': errors.nameError !== ErrorMessages.None}"
           />
           <span className="icon is-small is-left">
             <i className="fas fa-user" />
           </span>
-          {authorError && (
+
             <span
-              className="icon is-small is-right has-text-danger"
+              class="icon is-small is-right has-text-danger"
               data-cy="ErrorIcon"
             >
-              <i className="fas fa-exclamation-triangle" />
+              <i className="fas fa-exclamation-triangle" v-if="errors.nameError !== ErrorMessages.None"/>
             </span>
-          )}
+
         </div>
-        {authorError && (
-          <p className="help is-danger" data-cy="ErrorMessage">
-            Name is required
+
+          <p className="help" data-cy="ErrorMessage" :class="{'is-danger': errors.nameError !== ErrorMessages.None}">
+            {{ errors.nameError }}
           </p>
-        )}
+
       </div>
       <div className="field" data-cy="EmailField">
         <label className="label" htmlFor="comment-author-email">
@@ -53,25 +70,26 @@ export default {
 
             id="comment-author-email"
             placeholder="email@test.com"
-            className="input is-danger"
+            class="input"
+            :class="{'is-danger': errors.emailError !== ErrorMessages.None}"
           />
           <span className="icon is-small is-left">
             <i className="fas fa-envelope" />
           </span>
-          {emailError && (
+
             <span
               className="icon is-small is-right has-text-danger"
               data-cy="ErrorIcon"
             >
-              <i className="fas fa-exclamation-triangle" />
+              <i className="fas fa-exclamation-triangle" v-if="errors.emailError !== ErrorMessages.None"/>
             </span>
-          )}
+
         </div>
-        {emailError && (
+
           <p className="help is-danger" data-cy="ErrorMessage">
-            Email is required
+            {{ errors.emailError }}
           </p>
-        )}
+
       </div>
       <div className="field" data-cy="BodyField">
         <label className="label" htmlFor="comment-body">
@@ -81,16 +99,16 @@ export default {
           <textarea
             id="comment-body"
             name="body"
-            value={bodyField}
             placeholder="Type comment here"
-            className="input is-danger"
+            class="input"
+            :class="{'is-danger': errors.bodyError !== ErrorMessages.None}"
           />
         </div>
-        {bodyError && (
+
           <p className="help is-danger" data-cy="ErrorMessage">
-            Enter some text
+            {{ errors.bodyError }}
           </p>
-        )}
+
       </div>
       <div className="field is-grouped">
         <div className="control">
@@ -102,7 +120,6 @@ export default {
           </button>
         </div>
         <div className="control">
-          {/* eslint-disable-next-line react/button-has-type */}
           <button type="reset" className="button is-link is-light">
             Clear
           </button>

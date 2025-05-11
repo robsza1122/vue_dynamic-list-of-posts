@@ -1,8 +1,9 @@
 <script setup>
+import { SideBarEnum } from '@/utils/SideBarModes';
 import {computed} from 'vue';
 const {post} = defineProps({
   post: {
-    post: Object,
+    type: Object,
     required: true,
   }
 });
@@ -17,6 +18,7 @@ const sideBarMode = defineModel('sideBarMode', {
 const isCurrentPost = computed(() =>
   currentPostId.value === post.id
 )
+
 const switchPost = () => {
   if (isCurrentPost.value) {
     currentPostId.value = null;
@@ -25,8 +27,9 @@ const switchPost = () => {
     return;
   }
   currentPostId.value = post.id;
-  sideBarMode.value = "post";
+  sideBarMode.value = SideBarEnum.Post;
 }
+console.log(post)
 </script>
 <template>
             <tr>

@@ -1,6 +1,7 @@
 <script setup>
 import { SideBarEnum } from '@/utils/SideBarModes'
 import PostItem from './PostItem.vue'
+import Loader from './Loader/Loader.vue'
 const { posts } = defineProps({
   posts: {
     type: Array,
@@ -21,6 +22,9 @@ const body = defineModel('body', {
   type: String,
   default: '',
 })
+const isLoading = defineModel('isLoading', {
+  type: Boolean,
+})
 
 const openNewPostForm = () => {
   currentPostId.value = null;
@@ -34,6 +38,7 @@ const openNewPostForm = () => {
 
 console.log(title.value);
 console.log(sideBarMode.value);
+console.log(posts.value)
 
 </script>
 
@@ -52,9 +57,10 @@ console.log(sideBarMode.value);
             Add New Post
           </button>
         </div>
-        <p class="notification is-warning" data-cy="NoPostsYet" v-if="posts.length === 0">
+        <p class="notification is-warning" data-cy="NoPostsYet" v-if="posts.length === 0 && !isLoading">
           No posts yet
         </p>
+        <Loader v-else-if="isLoading"/>
 
         <table class="table is-fullwidth is-striped is-hoverable is-narrow" v-else>
           <thead>

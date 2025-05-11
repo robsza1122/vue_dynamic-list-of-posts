@@ -11,3 +11,8 @@ export const getUserById = async (email) => {
 
   return user.data
 }
+
+
+export const getUsers = () => {
+  return client.get(`/users`);
+};

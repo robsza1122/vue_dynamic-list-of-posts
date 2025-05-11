@@ -1,12 +1,14 @@
 <script setup>
 import PostsList from './PostsList.vue'
 import SideBar from './SideBar.vue'
-import Post from './Post.vue'
+import PostPreview from './PostPreview.vue'
 import { SideBarEnum } from '@/utils/SideBarModes'
 import UserNavigation from './UserNavigation.vue'
 import { onMounted, ref } from 'vue'
 import { getPosts } from '../api/api.posts'
 import NewPostForm from './NewPostForm.vue'
+import EditForm from './EditForm.vue'
+import NewCommentForm from './NewCommentForm.vue'
 
 const user = defineModel('user', {
   type: Object,
@@ -15,21 +17,25 @@ const user = defineModel('user', {
 const sideBarMode = ref('')
 const currentPostId = ref(0)
 const body = ref('')
-const title = ref('');
-const posts = ref([]);
+const title = ref('')
+const posts = ref([])
+const isLoading = ref(false)
 
 onMounted(async () => {
+  isLoading.value = true
   try {
-
-    posts.value = await getPosts();
+    posts.value = await getPosts().finally(() => {
+      isLoading.value = false
+    })
   } catch (error) {
     console.log(error)
   }
 })
 
-console.log(posts.value);
+console.log(posts.value)
 
-console.log(sideBarMode.value)
+console.log(sideBarMode.value);
+console.log(currentPostId.value)
 </script>
 
 <template>
@@ -44,7 +50,8 @@ console.log(sideBarMode.value)
                     {errorNotification}
                   </div> -->
 
-        <PostsList
+                  <PostsList
+          v-model:isLoading="isLoading"
           v-model:title="title"
           v-model:body="body"
           v-model:sideBarMode="sideBarMode"
@@ -52,26 +59,39 @@ console.log(sideBarMode.value)
           :posts="posts"
         />
         <SideBar :class="{ 'Sidebar--open': !!sideBarMode }">
-        <Post
-          v-if="sideBarMode === SideBarEnum.Post"
-          v-model:posts="posts"
-          v-model:sideBarMode="sideBarMode"
-          v-model:currentPostId="currentPostId"
-          v-model:title="title"
-          v-model:body="body"
-          :post-id="currentPostId"
-        />
 
-        <NewPostForm
-          v-else-if="sideBarMode === SideBarEnum.New_Post_Form"
-          v-model:sideBarMode="sideBarMode"
-          v-model:currentPostId="currentPostId"
-          v-model:posts="posts"
-          v-model:title="title"
-          v-model:body="body"
-        />
+          <PostPreview
+            v-if="sideBarMode === SideBarEnum.Post"
+            v-model:posts="posts"
+            v-model:sideBarMode="sideBarMode"
+            v-model:currentPostId="currentPostId"
+            v-model:title="title"
+            v-model:body="body"
+            :postId="currentPostId"
+          />
 
-       </SideBar>
+          <NewPostForm
+            v-else-if="sideBarMode === SideBarEnum.New_Post_Form"
+            v-model:isLoading="isLoading"
+            v-model:sideBarMode="sideBarMode"
+            v-model:currentPostId="currentPostId"
+            v-model:posts="posts"
+            v-model:title="title"
+            v-model:body="body"
+          />
+          <EditForm
+          v-else-if="sideBarMode === SideBarEnum.Edit_Post_Form"
+            v-model:isLoading="isLoading"
+            v-model:sideBarMode="sideBarMode"
+            v-model:currentPostId="currentPostId"
+            v-model:posts="posts"
+            v-model:title="title"
+            v-model:body="body"
+          />
+          <NewCommentForm
+          v-else-if="sideBarMode === SideBarEnum.New_Comment_Form"
+          v-model:sideBarMode="sideBarMode"/>
+        </SideBar>
       </div>
     </div>
   </main>

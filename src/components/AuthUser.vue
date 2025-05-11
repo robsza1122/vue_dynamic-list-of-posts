@@ -2,8 +2,7 @@
 import { ref } from 'vue'
 import { PatternEmail } from '@/utils/EmailPattern'
 import { ErrorMessages } from '@/utils/ErrorMessages'
-import { createUser } from '@/utils/fetchClient'
-import { getUserById } from '@/api/api.users'
+import { createUser, getUserById } from '@/api/api.users'
 import { setUser } from '@/utils/UserLocaleStorage'
 import LoginField from './InputField.vue'
 

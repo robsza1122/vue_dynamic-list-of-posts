@@ -17,14 +17,17 @@ defineProps({
     type: String,
   })
 
+  const model = defineModel({type: String})
+
 </script>
 <template>
         <div className="field" data-cy="BodyField">
   <label className="label" htmlFor="textarea">{{ title }}</label>
   <div className="control">
     <textarea
+    v-model="model"
       id="textarea"
-      name="name"
+      :name="title"
       :placeholder="placeholder"
       class="textarea"
       :class="{'is-danger': error}"
