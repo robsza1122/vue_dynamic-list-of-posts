@@ -61,7 +61,7 @@ const onAddComment = async () => {
   } catch (error) {
     console.error(error)
   }
-}
+};
 </script>
 
 <template>

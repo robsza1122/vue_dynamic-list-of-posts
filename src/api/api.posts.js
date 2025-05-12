@@ -6,19 +6,19 @@ export const getPosts = async () => {
 }
 
 export const getPost = async (id) => {
-  return client.get(`/posts/${id}`);
+  return await client.get(`/posts/${id}`);
 }
 
 export const deletePost = async (id) => {
-  return client.delete(`/posts/${id}`);
+  return await client.delete(`/posts/${id}`);
 }
 
 export const editPost = async (id, title, body) => {
-  return client.patch(`/posts/${id}`, {
+  return await client.patch(`/posts/${id}`, {
     userId: getUserId(), title, body
   })
 }
 
-export const createPost = (title, body) => {
-  return client.post("/posts", {userId: getUserId(), title, body});
+export const createPost = async (title, body) => {
+  return await client.post("/posts", {userId: getUserId(), title, body});
 }

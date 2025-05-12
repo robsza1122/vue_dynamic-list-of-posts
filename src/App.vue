@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedContent from './components/AuthenticatedContent.vue'
-import LoginUser from './components/AuthUser.vue'
+import AuthUser from './components/AuthUser.vue'
 import { ref } from 'vue'
 import { getUser } from './utils/UserLocaleStorage'
 
@@ -10,7 +10,7 @@ console.log(user.value)
 </script>
 
 <template>
-  <LoginUser v-if="!user" v-model:user="user" />
+  <AuthUser v-if="!user" v-model:user="user" />
   <AuthenticatedContent v-else v-model:user="user" />
 </template>
 <style>

@@ -14,7 +14,3 @@ export const logoutUSer = () => {
 export const getUserId = () => {
   return getUser()?.id;
 }
-
-export const setPosts = (posts) => {
-  localStorage.setItem('posts', JSON.stringify(posts))
-}

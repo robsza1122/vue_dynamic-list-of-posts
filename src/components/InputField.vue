@@ -19,6 +19,10 @@ defineProps({
     default: 'text',
     type: String,
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  }
 })
 
 const error = defineModel('error', {

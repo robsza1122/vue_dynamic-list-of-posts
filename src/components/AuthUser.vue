@@ -4,7 +4,7 @@ import { PatternEmail } from '@/utils/EmailPattern'
 import { ErrorMessages } from '@/utils/ErrorMessages'
 import { createUser, getUserById } from '@/api/api.users'
 import { setUser } from '@/utils/UserLocaleStorage'
-import LoginField from './InputField.vue'
+import InputField from './InputField.vue'
 
 const user = defineModel('user', {
   type: Object,
@@ -31,7 +31,7 @@ const registerUser = async () => {
   }
 
   try {
-    const newUser = await createUser(email.value, name.value)
+    const newUser = await createUser(email.value.trim(), name.value.trim())
     setUser(newUser)
     user.value = newUser
   } catch (error) {
@@ -54,14 +54,17 @@ const loginUser = async () => {
   }
 
   try {
-    const fetchedUser = await getUserById(email.value)
+    const fetchedUser = (await getUserById(email.value))[0]
     if (!fetchedUser) {
-      userNoRegistered.value = true
+      userNoRegistered.value = true;
 
-      return
+      return;
+    } else {
+      setUser(fetchedUser)
+      user.value = fetchedUser;
     }
 
-    setUser(fetchedUser)
+
   } catch (error) {
     throw new Error(error)
   }
@@ -78,7 +81,7 @@ console.log(userNoRegistered.value)
   <section className="container is-flex is-justify-content-center">
     <form className="box mt-5" @submit.prevent="submit">
       <h1 className="title is-3">Get your userId</h1>
-      <LoginField
+      <InputField
         v-model="email"
         v-model:error="errors.emailError"
         title="Email"
@@ -87,7 +90,7 @@ console.log(userNoRegistered.value)
         :disabled="userNoRegistered"
         type="email"
       />
-      <LoginField
+      <InputField
         v-if="userNoRegistered"
         v-model="name"
         v-model:error="errors.nameError"
@@ -98,7 +101,7 @@ console.log(userNoRegistered.value)
 
       <div className="field">
         <button type="submit" className="button is-primary">
-          {{ userNoRegistered ? 'login' : 'register' }}
+          {{ userNoRegistered ? 'register' : 'login' }}
         </button>
       </div>
     </form>

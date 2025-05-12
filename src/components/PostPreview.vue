@@ -5,7 +5,7 @@ import { onMounted, ref, watch } from 'vue'
 import Loader from './Loader/Loader.vue'
 import { SideBarEnum } from '@/utils/SideBarModes'
 import NewCommentForm from './NewCommentForm.vue'
-
+import { getComments } from '@/api/api.comments'
 
 const { postId } = defineProps({
   postId: {
@@ -29,16 +29,19 @@ const title = defineModel('title', {
   type: String,
 })
 const post = ref({})
-const comments = ref([]);
-const newCommentFormIsShown = ref(false);
+const comments = ref([])
+const newCommentFormIsShown = ref(false)
 const isLoading = ref(false)
 
 const onShowPost = async () => {
   isLoading.value = true
   try {
-    const postsResponse = await getPost(postId)
-    console.log(postsResponse)
+    const [postsResponse, commentsResponse] = await Promise.all([
+      getPost(postId),
+      getComments(postId),
+    ])
     post.value = postsResponse
+    comments.value = commentsResponse
   } catch (error) {
     console.error(error)
   } finally {
@@ -61,19 +64,16 @@ const onDeletePost = async () => {
 }
 
 const onEditPost = () => {
-  sideBarMode.value = SideBarEnum.Edit_Post_Form;
-  currentPostId.value = postId;
-
+  sideBarMode.value = SideBarEnum.Edit_Post_Form
+  currentPostId.value = postId
 }
 
 const openCommentForm = () => {
-  newCommentFormIsShown.value = true;
-  currentPostId.value = postId;
-  body.value = post.value.body;
-  title.value = post.value.title;
-
+  newCommentFormIsShown.value = true
+  currentPostId.value = postId
+  body.value = post.value.body
+  title.value = post.value.title
 }
-
 
 console.log(post.value)
 console.log(postId)
@@ -97,22 +97,27 @@ console.log(postId)
     </div>
     <p data-cy="PostBody">{{ post.body }}</p>
     <div className="block" v-if="comments.length === 0">
-  <p className="title is-4">No comments yet</p>
-</div>
-<div  v-for="comment in comments" :key="comment.id">
-  <Comment
-  v-if="!newCommentFormIsShown"
-  :comment="comment"/>
-</div>
-<NewCommentForm
-          v-if="newCommentFormIsShown"
-          v-model:sideBarMode="sideBarMode"
-          v-model:newCommentFormIsShown="newCommentFormIsShown"
-          v-model:comments="comments"
-          :postId="postId"
-          />
+      <p className="title is-4">No comments yet</p>
+    </div>
 
+      <template v-if="comments.length > 0 && !newCommentFormIsShown">
+        <Comment :key="comment.id" v-for="comment in comments" :comment="comment" v-model:comments="comments" />
+      </template>
+      <NewCommentForm
+        v-if="newCommentFormIsShown"
+        v-model:sideBarMode="sideBarMode"
+        v-model:newCommentFormIsShown="newCommentFormIsShown"
+        v-model:comments="comments"
+        :postId="postId"
+      />
 
-<button v-if="!newCommentFormIsShown" type="button" className="button is-link" @click="openCommentForm">Write a comment</button>
+      <button
+        v-if="!newCommentFormIsShown"
+        type="button"
+        className="button is-link"
+        @click="openCommentForm"
+      >
+        Write a comment
+      </button>
   </div>
 </template>
