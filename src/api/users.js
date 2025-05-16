@@ -6,12 +6,11 @@ export const createUser =  async (email, name) => {
 
 }
 
-export const getUserById = async (email) => {
+export const getUserByEmail = async (email) => {
   return await client.get(`/users?email=${email}`)
 
 
 }
-
 
 export const getUsers = () => {
   return client.get(`/users`);

@@ -7,5 +7,6 @@ export const ErrorMessages = {
   Comment_Is_Empty: "Comment is empty. Please type your comment.",
   Email_Is_Empty: "Email is empty. Please type your email.",
   Body_Is_Empty: "Body is empty. Please type your comment.",
+  User_Already_Exists: "User already exists.",
   None: "",
 }

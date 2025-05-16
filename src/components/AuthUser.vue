@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { PatternEmail } from '@/utils/EmailPattern.js'
 import { ErrorMessages } from '@/utils/ErrorMessages.js'
-import { createUser, getUserById } from '@/api/users'
+import { createUser, getUserByEmail, getUsers } from '@/api/users'
 import { setUser } from '@/utils/UserLocaleStorage'
 import InputField from './InputField.vue'
 
@@ -17,10 +17,12 @@ const INITIAL_ERRORS = {
 
 const email = ref('')
 const name = ref('')
+const isLoading = ref(false)
 const errors = ref({ ...INITIAL_ERRORS })
 const userNoRegistered = ref(false)
 
 const registerUser = async () => {
+  isLoading.value = true
   errors.value = { ...INITIAL_ERRORS }
   if (!email.value.trim()) {
     errors.value.emailError = ErrorMessages.Email_Is_Required
@@ -36,11 +38,19 @@ const registerUser = async () => {
   }
 
   try {
+    const allUsers = await getUsers()
+  const existedUser = allUsers.find((user) => user.name === name.value.trim());
+  if (existedUser) {
+    errors.value.nameError = ErrorMessages.User_Already_Exists;
+    return;
+  }
     const newUser = await createUser(email.value.trim(), name.value.trim())
     setUser(newUser)
     user.value = newUser
   } catch (error) {
     throw new Error(error)
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -59,7 +69,7 @@ const loginUser = async () => {
   }
 
   try {
-    const fetchedUser = (await getUserById(email.value))[0]
+    const fetchedUser = (await getUserByEmail(email.value))[0]
     if (!fetchedUser) {
       userNoRegistered.value = true;
 
@@ -103,7 +113,7 @@ const submit = () => {
       />
 
       <div className="field">
-        <button type="submit" className="button is-primary">
+        <button type="submit" class="button is-primary" :class="{'is-loading': isLoading}">
           {{ userNoRegistered ? 'register' : 'login' }}
         </button>
       </div>
