@@ -5,7 +5,7 @@ import PostPreview from './PostPreview.vue'
 import { SideBarEnum } from '@/utils/SideBarModes'
 import UserNavigation from './UserNavigation.vue'
 import { onMounted, ref } from 'vue'
-import { getPosts } from '../api/api.posts'
+import { getPosts } from '../api/posts'
 import NewPostForm from './NewPostForm.vue'
 import EditForm from './EditForm.vue'
 
@@ -31,10 +31,6 @@ onMounted(async () => {
   }
 })
 
-console.log(posts.value)
-
-console.log(sideBarMode.value);
-console.log(currentPostId.value)
 </script>
 
 <template>
@@ -42,14 +38,7 @@ console.log(currentPostId.value)
   <main className="section">
     <div className="container">
       <div className="tile is-ancestor">
-        <!-- <div
-                    className="notification is-danger"
-                    data-cy="PostsLoadingError"
-                  >
-                    {errorNotification}
-                  </div> -->
-
-                  <PostsList
+        <PostsList
           v-model:isLoading="isLoading"
           v-model:title="title"
           v-model:body="body"
@@ -58,7 +47,6 @@ console.log(currentPostId.value)
           :posts="posts"
         />
         <SideBar :class="{ 'Sidebar--open': !!sideBarMode }">
-
           <PostPreview
             v-if="sideBarMode === SideBarEnum.Post"
             v-model:posts="posts"
@@ -79,7 +67,7 @@ console.log(currentPostId.value)
             v-model:body="body"
           />
           <EditForm
-          v-else-if="sideBarMode === SideBarEnum.Edit_Post_Form"
+            v-else-if="sideBarMode === SideBarEnum.Edit_Post_Form"
             v-model:isLoading="isLoading"
             v-model:sideBarMode="sideBarMode"
             v-model:currentPostId="currentPostId"

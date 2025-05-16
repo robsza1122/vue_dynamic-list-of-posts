@@ -1,11 +1,11 @@
 <script setup>
-import { getPost, deletePost } from '@/api/api.posts'
+import { getPost, deletePost } from '@/api/posts'
 import Comment from './Comment.vue'
 import { onMounted, ref, watch } from 'vue'
 import Loader from './Loader/Loader.vue'
 import { SideBarEnum } from '@/utils/SideBarModes'
 import NewCommentForm from './NewCommentForm.vue'
-import { getComments } from '@/api/api.comments'
+import { getComments } from '@/api/comments'
 
 const { postId } = defineProps({
   postId: {
@@ -75,8 +75,6 @@ const openCommentForm = () => {
   title.value = post.value.title
 }
 
-console.log(post.value)
-console.log(postId)
 </script>
 <template>
   <Loader v-if="isLoading" />
@@ -100,24 +98,29 @@ console.log(postId)
       <p className="title is-4">No comments yet</p>
     </div>
 
-      <template v-if="comments.length > 0 && !newCommentFormIsShown">
-        <Comment :key="comment.id" v-for="comment in comments" :comment="comment" v-model:comments="comments" />
-      </template>
-      <NewCommentForm
-        v-if="newCommentFormIsShown"
-        v-model:sideBarMode="sideBarMode"
-        v-model:newCommentFormIsShown="newCommentFormIsShown"
+    <template v-if="comments.length > 0 && !newCommentFormIsShown">
+      <Comment
+        :key="comment.id"
+        v-for="comment in comments"
+        :comment="comment"
         v-model:comments="comments"
-        :postId="postId"
       />
+    </template>
+    <NewCommentForm
+      v-if="newCommentFormIsShown"
+      v-model:sideBarMode="sideBarMode"
+      v-model:newCommentFormIsShown="newCommentFormIsShown"
+      v-model:comments="comments"
+      :postId="postId"
+    />
 
-      <button
-        v-if="!newCommentFormIsShown"
-        type="button"
-        className="button is-link"
-        @click="openCommentForm"
-      >
-        Write a comment
-      </button>
+    <button
+      v-if="!newCommentFormIsShown"
+      type="button"
+      className="button is-link"
+      @click="openCommentForm"
+    >
+      Write a comment
+    </button>
   </div>
 </template>

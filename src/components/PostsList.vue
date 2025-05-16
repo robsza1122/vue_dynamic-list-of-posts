@@ -32,13 +32,8 @@ const openNewPostForm = () => {
 
   title.value = '';
   body.value = '';
-
-  console.log(sideBarMode.value)
 }
 
-console.log(title.value);
-console.log(sideBarMode.value);
-console.log(posts.value)
 
 </script>
 

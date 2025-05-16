@@ -1,9 +1,9 @@
 <script setup>
-import { ErrorMessages } from '@/utils/ErrorMessages'
+import { ErrorMessages } from '@/utils/ErrorMessages.js'
 import { ref } from 'vue'
 import InputField from './InputField.vue'
 import TextAreaField from './TextAreaField.vue'
-import { addComments } from '@/api/api.comments'
+import { addComments } from '@/api/comments'
 
 const { postId } = defineProps({
   postId: {
@@ -13,6 +13,9 @@ const { postId } = defineProps({
 })
 const comments = defineModel('comments', {
   type: Array,
+})
+const isLoading = defineModel('isLoading', {
+  type: Boolean,
 })
 const commentsErrors = {
   nameError: ErrorMessages.None,
@@ -34,6 +37,7 @@ const onClear = () => {
 }
 
 const onAddComment = async () => {
+  isLoading.value = true
   errors.value = { ...commentsErrors }
   if (!name.value.trim()) {
     errors.value.nameError = ErrorMessages.Name_Is_Required
@@ -50,18 +54,15 @@ const onAddComment = async () => {
   }
 
   try {
-    const newComment = addComments(
-      postId,
-      name.value.trim(),
-      email.value.trim(),
-      body.value.trim(),
-    )
-    comments.value.push(newComment);
+    const newComment = addComments(postId, name.value.trim(), email.value.trim(), body.value.trim())
+    comments.value.push(newComment)
     newCommentFormIsShown.value = false
   } catch (error) {
     console.error(error)
+  } finally {
+    isLoading.value = false
   }
-};
+}
 </script>
 
 <template>
@@ -72,7 +73,7 @@ const onAddComment = async () => {
       title="Author Name"
       placeholder="Author Name"
       icon="fa-user"
-      :disabled="userNoRegistered"
+      :disabled="false"
       type="text"
     />
     <InputField
@@ -82,7 +83,7 @@ const onAddComment = async () => {
       icon="fa-envelope"
       placeholder="Author Email"
       type="email"
-      :disabled="userNoRegistered"
+      :disabled="false"
     />
     <TextAreaField
       v-model="body"

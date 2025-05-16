@@ -11,8 +11,6 @@ const handleLogout = () => {
   user.value = null;
 }
 
-console.log(user)
-
 </script>
 
 <template>

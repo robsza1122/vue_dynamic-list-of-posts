@@ -1,4 +1,4 @@
-import { client } from '@/utils/fetchClient'
+import { client } from '@/utils/fetchClient.js'
 
 export const createUser =  async (email, name) => {
   return await client.post('/users', { email, name })

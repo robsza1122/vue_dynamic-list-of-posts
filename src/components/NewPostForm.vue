@@ -1,9 +1,9 @@
 <script setup>
 import { SideBarEnum } from '@/utils/SideBarModes'
-import {createPost} from '@/api/api.posts'
+import { createPost } from '@/api/posts'
 import InputField from './InputField.vue'
 import TextAreaField from './TextAreaField.vue'
-import { ErrorMessages } from '@/utils/ErrorMessages'
+import { ErrorMessages } from '@/utils/ErrorMessages.js'
 import { ref } from 'vue'
 const posts = defineModel('posts', {
   type: Array,
@@ -21,7 +21,6 @@ const sideBarMode = defineModel('sideBarMode', {
   type: String,
 })
 
-
 const errorMessages = {
   titleError: ErrorMessages.None,
   bodyError: ErrorMessages.None,
@@ -34,31 +33,31 @@ const onSubmit = async () => {
   try {
     const newPost = await createPost(title.value.trim(), body.value.trim())
 
-    posts.value.push(newPost);
+    posts.value.push(newPost)
 
-    sideBarMode.value = SideBarEnum.New_Post_Form;
+    sideBarMode.value = SideBarEnum.New_Post_Form
 
-    currentPostId.value = newPost.id;
-    title.value = '';
-    body.value = '';
+    currentPostId.value = newPost.id
+    title.value = ''
+    body.value = ''
   } catch (error) {
     console.error(error)
   }
 }
 
 const onFormSubmit = async () => {
-  errors.value = {...errorMessages}
+  errors.value = { ...errorMessages }
   if (!title.value.trim()) {
-    errors.value.titleError = ErrorMessages.Title_Post_Is_Empty;
+    errors.value.titleError = ErrorMessages.Title_Post_Is_Empty
   }
   if (!body.value.trim()) {
-    errors.value.bodyError = ErrorMessages.Text_Area_Is_Empty;
+    errors.value.bodyError = ErrorMessages.Text_Area_Is_Empty
   }
   if (errors.value.titleError || errors.value.bodyError) {
-    return;
+    return
   }
 
-  await onSubmit();
+  await onSubmit()
 }
 
 const onCancel = async () => {
@@ -67,7 +66,6 @@ const onCancel = async () => {
   body.value = ''
 }
 
-console.log(title.value)
 </script>
 
 <template>
@@ -76,24 +74,23 @@ console.log(title.value)
 
     <form @submit.prevent="onFormSubmit" @reset="onCancel">
       <InputField
-      v-model="title"
-      v-model:error="errors.titleError"
-      icon="fa-user"
-      placeholder="Type title of your post"
-      type="text"
-      title="Title"
+        v-model="title"
+        v-model:error="errors.titleError"
+        icon="fa-user"
+        placeholder="Type title of your post"
+        type="text"
+        title="Title"
       />
-        <TextAreaField
+      <TextAreaField
         v-model="body"
         v-model:error="errors.bodyError"
         title="Text"
         placeholder="Type text of your post"
-        />
+      />
 
       <div className="field is-grouped">
         <div className="control">
           <button type="submit" className="button is-link">Save</button>
-
         </div>
         <div className="control">
           <button type="reset" className="button is-link is-light">Cancel</button>

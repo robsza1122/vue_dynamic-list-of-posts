@@ -3,8 +3,8 @@ import { SideBarEnum } from '@/utils/SideBarModes'
 import InputField from './InputField.vue'
 import TextAreaField from './TextAreaField.vue'
 import { ref } from 'vue'
-import { editPost } from '@/api/api.posts'
-import { ErrorMessages } from '@/utils/ErrorMessages'
+import { editPost } from '@/api/posts'
+import { ErrorMessages } from '@/utils/ErrorMessages.js'
 
 const errorMessages = {
   titleError: ErrorMessages.None,
@@ -17,7 +17,7 @@ const body = defineModel('body', {
   type: String,
 })
 const sideBarMode = defineModel('sideBarMode', {
-  type: Object,
+  type: String,
 })
 
 const errors = ref({

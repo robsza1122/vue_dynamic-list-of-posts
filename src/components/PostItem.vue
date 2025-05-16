@@ -27,7 +27,7 @@ const switchPost = () => {
   currentPostId.value = post.id
   sideBarMode.value = SideBarEnum.Post
 }
-console.log(post)
+
 </script>
 <template>
   <tr>

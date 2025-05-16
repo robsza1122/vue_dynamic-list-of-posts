@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
-import { removeComments } from '@/api/api.comments'
+import { removeComments } from '@/api/comments'
 
 const comments = defineModel('comments', {
   type: Array,

@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-import { PatternEmail } from '@/utils/EmailPattern'
-import { ErrorMessages } from '@/utils/ErrorMessages'
-import { createUser, getUserById } from '@/api/api.users'
+import { PatternEmail } from '@/utils/EmailPattern.js'
+import { ErrorMessages } from '@/utils/ErrorMessages.js'
+import { createUser, getUserById } from '@/api/users'
 import { setUser } from '@/utils/UserLocaleStorage'
 import InputField from './InputField.vue'
 
@@ -22,6 +22,11 @@ const userNoRegistered = ref(false)
 
 const registerUser = async () => {
   errors.value = { ...INITIAL_ERRORS }
+  if (!email.value.trim()) {
+    errors.value.emailError = ErrorMessages.Email_Is_Required
+  } else if (!PatternEmail.test(email.value)) {
+    errors.value.emailError = ErrorMessages.Email_Is_Invalid
+  }
   if (!name.value.trim()) {
     errors.value.nameError = ErrorMessages.Name_Is_Required
   }
@@ -73,8 +78,6 @@ const loginUser = async () => {
 const submit = () => {
   userNoRegistered.value ? registerUser() : loginUser()
 }
-
-console.log(userNoRegistered.value)
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup>
-import { ErrorMessages } from '@/utils/ErrorMessages';
+import { ErrorMessages } from '@/utils/ErrorMessages.js';
 
 
 defineProps({

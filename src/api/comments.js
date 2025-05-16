@@ -1,4 +1,4 @@
-import { client } from "@/utils/fetchClient";
+import { client } from "@/utils/fetchClient.js";
 
 export const getComments = (id) => {
   return client.get(`/comments?postId=${id}`);

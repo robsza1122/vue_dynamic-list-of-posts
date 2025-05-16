@@ -1,4 +1,4 @@
-import { client } from "@/utils/fetchClient"
+import { client } from "@/utils/fetchClient.js"
 import { getUserId } from "@/utils/UserLocaleStorage"
 
 export const getPosts = async () => {
