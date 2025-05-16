@@ -7,7 +7,7 @@ export const setUser = (user) => {
   localStorage.setItem('user', JSON.stringify(user))
 }
 
-export const logoutUSer = () => {
+export const removeUser = () => {
   localStorage.removeItem('user');
 }
 

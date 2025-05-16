@@ -1,5 +1,5 @@
 <script setup>
-import { logoutUSer } from '@/utils/UserLocaleStorage';
+import { removeUser } from '@/utils/UserLocaleStorage';
 
 const user = defineModel(
   'user', {
@@ -7,7 +7,7 @@ const user = defineModel(
   }
 )
 const handleLogout = () => {
-  logoutUSer();
+  removeUser();
   user.value = null;
 }
 

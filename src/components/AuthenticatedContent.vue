@@ -23,11 +23,11 @@ const isLoading = ref(false)
 onMounted(async () => {
   isLoading.value = true
   try {
-    posts.value = await getPosts().finally(() => {
-      isLoading.value = false
-    })
+    posts.value = await getPosts()
   } catch (error) {
     console.log(error)
+  } finally {
+    isLoading.value = false
   }
 })
 

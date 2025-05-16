@@ -8,7 +8,7 @@ export const removeComments = (id) => {
   return client.delete(`/comments/${id}`);
 };
 
-export const addComments = (
+export const postComment = (
   postId,
   name,
   email,

@@ -33,9 +33,20 @@ const posts = defineModel('posts', {
   type: Array,
 })
 
-const onEdit = async () => {
+const onEditSubmit = async () => {
   isLoading.value = true
-  sideBarMode.value = sideBarMode.value === SideBarEnum.Edit_Post_Form
+  sideBarMode.value = SideBarEnum.Edit_Post_Form
+  errors.value = { ...errorMessages }
+  if (!title.value.trim()) {
+    errors.value.titleError = ErrorMessages.Title_Post_Is_Empty
+  }
+  if (!body.value.trim()) {
+    errors.value.bodyError = ErrorMessages.Text_Area_Is_Empty
+  }
+  if (errors.value.titleError || errors.value.bodyError) {
+    return
+  }
+
   try {
     await editPost(currentPostId.value, title.value.trim(), body.value.trim())
     posts.value = posts.value.map((post) => {
@@ -49,21 +60,6 @@ const onEdit = async () => {
   } finally {
     isLoading.value = false
   }
-}
-
-const onEditSubmit = async () => {
-  errors.value = { ...errorMessages }
-  if (!title.value.trim()) {
-    errors.value.titleError = ErrorMessages.Title_Post_Is_Empty
-  }
-  if (!body.value.trim()) {
-    errors.value.bodyError = ErrorMessages.Text_Area_Is_Empty
-  }
-  if (errors.value.titleError || errors.value.bodyError) {
-    return
-  }
-
-  await onEdit()
 }
 </script>
 <template>

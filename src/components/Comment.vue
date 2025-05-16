@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
 import { removeComments } from '@/api/comments'
 
@@ -24,7 +23,7 @@ const onDelete = async () => {
 <template>
   <article className="message is-small">
     <div className="message-header">
-      <a href="{`mailto:${comment.email}`}"> {{ comment.name }} </a>
+      <a :href="`mailto:${comment.email}`"> {{ comment.name }} </a>
       <button
         type="button"
         className="delete is-small"

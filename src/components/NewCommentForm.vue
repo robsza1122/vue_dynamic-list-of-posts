@@ -3,7 +3,7 @@ import { ErrorMessages } from '@/utils/ErrorMessages.js'
 import { ref } from 'vue'
 import InputField from './InputField.vue'
 import TextAreaField from './TextAreaField.vue'
-import { addComments } from '@/api/comments'
+import { postComment } from '@/api/comments'
 
 const { postId } = defineProps({
   postId: {
@@ -54,7 +54,7 @@ const onAddComment = async () => {
   }
 
   try {
-    const newComment = addComments(postId, name.value.trim(), email.value.trim(), body.value.trim())
+    const newComment = await postComment(postId, name.value.trim(), email.value.trim(), body.value.trim())
     comments.value.push(newComment)
     newCommentFormIsShown.value = false
   } catch (error) {
