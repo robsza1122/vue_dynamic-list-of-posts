@@ -63,7 +63,7 @@ const onEditSubmit = async () => {
 }
 </script>
 <template>
-  <div className="content" v-if="sideBarMode === SideBarEnum.Edit_Post_Form">
+  <div class="content" v-if="sideBarMode === SideBarEnum.Edit_Post_Form">
     <h2>Edit Post</h2>
 
     <form @submit.prevent="onEditSubmit" @reset="onCancel">
@@ -82,18 +82,14 @@ const onEditSubmit = async () => {
         placeholder="Type text of your post"
       />
 
-      <div className="field is-grouped">
-        <div className="control">
-          <button
-            type="submit"
-            class="button is-link"
-            :class="{ 'button is-link is-loading': !!isLoading }"
-          >
+      <div class="field is-grouped">
+        <div class="control">
+          <button type="submit" :class="['button is-link', { 'is-loading': !!isLoading }]">
             Save
           </button>
         </div>
-        <div className="control">
-          <button type="reset" className="button is-link is-light">Cancel</button>
+        <div class="control">
+          <button type="reset" class="button is-link is-light">Cancel</button>
         </div>
       </div>
     </form>

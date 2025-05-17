@@ -30,14 +30,13 @@ onMounted(async () => {
     isLoading.value = false
   }
 })
-
 </script>
 
 <template>
   <UserNavigation v-model:user="user" />
-  <main className="section">
-    <div className="container">
-      <div className="tile is-ancestor">
+  <main class="section">
+    <div class="container">
+      <div class="tile is-ancestor">
         <PostsList
           v-model:isLoading="isLoading"
           v-model:title="title"

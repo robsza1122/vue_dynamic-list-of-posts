@@ -21,16 +21,11 @@ const onDelete = async () => {
 </script>
 
 <template>
-  <article className="message is-small">
-    <div className="message-header">
+  <article class="message is-small">
+    <div class="message-header">
       <a :href="`mailto:${comment.email}`"> {{ comment.name }} </a>
-      <button
-        type="button"
-        className="delete is-small"
-        aria-label="delete"
-        @click="onDelete"
-      ></button>
+      <button type="button" class="delete is-small" aria-label="delete" @click="onDelete"></button>
     </div>
-    <div className="message-body">{{ comment.body }}</div>
+    <div class="message-body">{{ comment.body }}</div>
   </article>
 </template>

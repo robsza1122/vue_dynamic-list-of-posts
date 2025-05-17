@@ -10,7 +10,7 @@ console.log(user.value)
 </script>
 
 <template>
-  <AuthUser v-if="!user" v-model:user="user" />
+  <AuthUser v-if="!user.value" v-model:user="user" />
   <AuthenticatedContent v-else v-model:user="user" />
 </template>
 <style>

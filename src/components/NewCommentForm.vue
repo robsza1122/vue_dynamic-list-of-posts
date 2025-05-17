@@ -54,7 +54,12 @@ const onAddComment = async () => {
   }
 
   try {
-    const newComment = await postComment(postId, name.value.trim(), email.value.trim(), body.value.trim())
+    const newComment = await postComment(
+      postId,
+      name.value.trim(),
+      email.value.trim(),
+      body.value.trim(),
+    )
     comments.value.push(newComment)
     newCommentFormIsShown.value = false
   } catch (error) {
@@ -91,14 +96,14 @@ const onAddComment = async () => {
       title="Comment"
       placeholder="Type comment"
     />
-    <div className="field is-grouped">
-      <div className="control">
+    <div class="field is-grouped">
+      <div class="control">
         <button type="submit" class="button is-link" :class="{ 'is-loading': isLoading }">
           Add
         </button>
       </div>
-      <div className="control">
-        <button type="reset" className="button is-link is-light">Clear</button>
+      <div class="control">
+        <button type="reset" class="button is-link is-light">Clear</button>
       </div>
     </div>
   </form>

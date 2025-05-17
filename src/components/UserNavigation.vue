@@ -1,33 +1,30 @@
 <script setup>
-import { removeUser } from '@/utils/UserLocaleStorage';
+import { removeUser } from '@/utils/UserLocaleStorage'
 
-const user = defineModel(
-  'user', {
-    type: Object,
-  }
-)
+const user = defineModel('user', {
+  type: Object,
+})
 const handleLogout = () => {
-  removeUser();
-  user.value = null;
+  removeUser()
+  user.value = null
 }
-
 </script>
 
 <template>
-  <nav className="navbar" role="navigation" aria-label="main navigation">
-  <div className="navbar-item">
-    <h2 className="is-size-4">Vue List Of Posts</h2>
-  </div>
-  <div className="navbar-end">
-    <div className="navbar-item">
-      <div className="buttons">
-        <div className="mr-5 mb-2">
-          <p>User: {{ user?.name }}</p>
-        </div>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-item">
+      <h2 class="is-size-4">Vue List Of Posts</h2>
+    </div>
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <div class="mr-5 mb-2">
+            <p>User: {{ user?.name }}</p>
+          </div>
 
-        <a className="button is-light" @click="handleLogout"> Logout </a>
+          <a class="button is-light" @click="handleLogout"> Logout </a>
+        </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
 </template>

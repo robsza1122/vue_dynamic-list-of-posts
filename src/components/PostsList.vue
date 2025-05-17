@@ -27,22 +27,20 @@ const isLoading = defineModel('isLoading', {
 })
 
 const openNewPostForm = () => {
-  currentPostId.value = null;
-  sideBarMode.value = SideBarEnum.New_Post_Form;
+  currentPostId.value = null
+  sideBarMode.value = SideBarEnum.New_Post_Form
 
-  title.value = '';
-  body.value = '';
+  title.value = ''
+  body.value = ''
 }
-
-
 </script>
 
 <template>
-  <div className="tile is-parent">
-    <div className="tile is-child box is-success">
-      <div className="block">
-        <div className="block is-flex is-justify-content-space-between">
-          <p className="title">Posts</p>
+  <div class="tile is-parent">
+    <div class="tile is-child box is-success">
+      <div class="block">
+        <div class="block is-flex is-justify-content-space-between">
+          <p class="title">Posts</p>
           <button
             type="button"
             class="button is-link"
@@ -52,17 +50,21 @@ const openNewPostForm = () => {
             Add New Post
           </button>
         </div>
-        <p class="notification is-warning" data-cy="NoPostsYet" v-if="posts.length === 0 && !isLoading">
+        <p
+          class="notification is-warning"
+          data-cy="NoPostsYet"
+          v-if="posts.length === 0 && !isLoading"
+        >
           No posts yet
         </p>
-        <Loader v-else-if="isLoading"/>
+        <Loader v-else-if="isLoading" />
 
         <table class="table is-fullwidth is-striped is-hoverable is-narrow" v-else>
           <thead>
-            <tr className="has-background-link-light">
+            <tr class="has-background-link-light">
               <th>ID</th>
               <th>Title</th>
-              <th className="has-text-right">Actions</th>
+              <th class="has-text-right">Actions</th>
             </tr>
           </thead>
           <tbody>

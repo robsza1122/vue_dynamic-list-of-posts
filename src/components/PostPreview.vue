@@ -50,7 +50,7 @@ const onShowPost = async () => {
 }
 
 onMounted(onShowPost)
-watch(() => postId, onShowPost)
+watch(postId, onShowPost)
 
 const onDeletePost = async () => {
   try {
@@ -74,28 +74,27 @@ const openCommentForm = () => {
   body.value = post.value.body
   title.value = post.value.title
 }
-
 </script>
 <template>
   <Loader v-if="isLoading" />
-  <div className="block" v-if="!isLoading">
-    <div className="is-flex is-justify-content-space-between is-align-items-center">
+  <div class="block" v-if="!isLoading">
+    <div class="is-flex is-justify-content-space-between is-align-items-center">
       <h2>{{ isLoading ? '' : `#${post.id}: ${post.title}` }}</h2>
-      <div className="is-flex">
-        <span className="icon is-small is-right is-clickable" @click="onEditPost">
-          <i className="fas fa-pen-to-square"></i>
+      <div class="is-flex">
+        <span class="icon is-small is-right is-clickable" @click="onEditPost">
+          <i class="fas fa-pen-to-square"></i>
         </span>
         <span
-          className="icon is-small is-right has-text-danger is-clickable ml-3"
+          class="icon is-small is-right has-text-danger is-clickable ml-3"
           @click="onDeletePost"
         >
-          <i className="fas fa-trash"></i>
+          <i class="fas fa-trash"></i>
         </span>
       </div>
     </div>
     <p data-cy="PostBody">{{ post.body }}</p>
-    <div className="block" v-if="comments.length === 0">
-      <p className="title is-4">No comments yet</p>
+    <div class="block" v-if="comments.length === 0">
+      <p class="title is-4">No comments yet</p>
     </div>
 
     <template v-if="comments.length > 0 && !newCommentFormIsShown">
@@ -117,7 +116,7 @@ const openCommentForm = () => {
     <button
       v-if="!newCommentFormIsShown"
       type="button"
-      className="button is-link"
+      class="button is-link"
       @click="openCommentForm"
     >
       Write a comment

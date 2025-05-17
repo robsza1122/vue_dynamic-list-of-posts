@@ -33,9 +33,8 @@ const onSubmit = async () => {
   try {
     const newPost = await createPost(title.value.trim(), body.value.trim())
 
-    posts.value.push(newPost)
-
     sideBarMode.value = SideBarEnum.New_Post_Form
+    posts.value.push(newPost)
 
     currentPostId.value = newPost.id
     title.value = ''
@@ -65,11 +64,10 @@ const onCancel = async () => {
   title.value = ''
   body.value = ''
 }
-
 </script>
 
 <template>
-  <div className="content" v-if="sideBarMode === SideBarEnum.New_Post_Form">
+  <div class="content" v-if="sideBarMode === SideBarEnum.New_Post_Form">
     <h2>Create New Post</h2>
 
     <form @submit.prevent="onFormSubmit" @reset="onCancel">
@@ -88,12 +86,12 @@ const onCancel = async () => {
         placeholder="Type text of your post"
       />
 
-      <div className="field is-grouped">
-        <div className="control">
-          <button type="submit" className="button is-link">Save</button>
+      <div class="field is-grouped">
+        <div class="control">
+          <button type="submit" class="button is-link">Save</button>
         </div>
-        <div className="control">
-          <button type="reset" className="button is-link is-light">Cancel</button>
+        <div class="control">
+          <button type="reset" class="button is-link is-light">Cancel</button>
         </div>
       </div>
     </form>
